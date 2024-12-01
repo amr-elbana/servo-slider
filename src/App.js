@@ -1,25 +1,65 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { Slider, Typography, Box, Grid } from '@mui/material';
 
-function App() {
+function MotorSliders() {
+  // State to manage angles for six motors
+  const [angles, setAngles] = useState([90, 90, 90, 90, 90, 90]);
+
+  // Handler to update individual motor angles
+  const handleSliderChange = (index) => (event, newValue) => {
+    const updatedAngles = [...angles];
+    updatedAngles[index] = newValue;
+    setAngles(updatedAngles);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box sx={{ p: 4 }}>
+      <Typography variant="h4" textAlign="center" gutterBottom>
+        Servo Motor Angle Control
+      </Typography>
+
+      <Grid container spacing={4} justifyContent="center">
+        {angles.map((angle, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Box
+              sx={{
+                textAlign: 'center',
+                mb: 2,
+                p: 2,
+                border: '1px solid #ccc',
+                borderRadius: 2,
+              }}
+            >
+              <Typography variant="h6">Motor {index + 1}</Typography>
+              <Typography variant="subtitle1" sx={{ mb: 2 }}>
+                Angle: {angle}°
+              </Typography>
+
+              <Slider
+                min={0}
+                max={180}
+                value={angle}
+                onChange={handleSliderChange(index)}
+                aria-label={`Motor ${index + 1}`}
+                valueLabelDisplay="auto"
+                sx={{
+                  '& .MuiSlider-track': {
+                    background: 'linear-gradient(to right, #ff9800, #f44336)',
+                  },
+                  '& .MuiSlider-thumb': {
+                    width: 24,
+                    height: 24,
+                    backgroundColor: '#fff',
+                    border: '3px solid #f44336',
+                  },
+                }}
+              />
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 }
 
-export default App;
+export default MotorSliders;
