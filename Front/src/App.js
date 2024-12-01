@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Slider, Typography, Box, Grid } from '@mui/material';
+import axios from 'axios';
+import ExecuteButton from './components/ExecuteButton';
 
 function MotorSliders() {
   // State to manage angles for six motors
@@ -10,6 +12,17 @@ function MotorSliders() {
     const updatedAngles = [...angles];
     updatedAngles[index] = newValue;
     setAngles(updatedAngles);
+  };
+
+  // Function to send the angles to the backend
+  const sendAnglesToBackend = async () => {
+    try {
+      const response = await axios.post('/api/motor-control', { angles });
+      console.log('Response from backend:', response.data);
+    } catch (error) {
+      console.error('Error sending angles to backend:', error);
+      console.error('Error response:', error.response.data);
+    }
   };
 
   return (
@@ -58,6 +71,8 @@ function MotorSliders() {
           </Grid>
         ))}
       </Grid>
+
+      <ExecuteButton onClick={sendAnglesToBackend} />
     </Box>
   );
 }
